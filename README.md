@@ -52,7 +52,6 @@ Here is an example `main.sim`:
        huge.print;
 
        OutImage;
-
     END;
 
 Stay in the `build` directory and run the following:
