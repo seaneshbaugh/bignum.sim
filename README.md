@@ -5,11 +5,11 @@ Integer Bignum library for Simula.
 Supports the following operations:
 
 * Add
-* ~Divide~
-* ~Multiply~
+* ~~Divide~~
+* ~~Multiply~~
 * Print
 * Subtract
-* ~SquareRoot~
+* ~~SquareRoot~~
 * ToString
 
 ## Usage
