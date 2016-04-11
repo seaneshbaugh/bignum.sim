@@ -1,0 +1,142 @@
+EXTERNAL CLASS Bignum;
+EXTERNAL CLASS Test;
+
+BEGIN
+   REF(Test) add_test;
+
+   add_test :- NEW Test("add_test.sim");
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("1361");
+
+      b :- NEW Bignum("781");
+
+      c :- a.Add(b);
+
+      add_test.TestText("1361 + 781", "2142", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("101010101");
+
+      b :- NEW Bignum("39933993");
+
+      c :- a.Add(b);
+
+      add_test.TestText("101010101 + 39933993", "140944094", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("1");
+
+      b :- NEW Bignum("1");
+
+      c :- a.Add(b);
+
+      add_test.TestText("1 + 1", "2", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("1");
+
+      b :- NEW Bignum("0");
+
+      c :- a.Add(b);
+
+      add_test.TestText("1 + 0", "1", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("0");
+
+      b :- NEW Bignum("0");
+
+      c :- a.Add(b);
+
+      add_test.TestText("0 + 0", "0", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("555");
+
+      b :- NEW Bignum("789");
+
+      c :- a.Add(b);
+
+      add_test.TestText("555 + 789", "1344", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("-10");
+
+      b :- NEW Bignum("-10");
+
+      c :- a.Add(b);
+
+      add_test.TestText("-10 + -10", "-20", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("-100");
+
+      b :- NEW Bignum("50");
+
+      c :- a.Add(b);
+
+      add_test.TestText("-100 + 50", "-50", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("-1");
+
+      b :- NEW Bignum("-1");
+
+      c :- a.Add(b);
+
+      add_test.TestText("-1 + -1", "-2", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("-1");
+
+      b :- NEW Bignum("1");
+
+      c :- a.Add(b);
+
+      add_test.TestText("-1 + 1", "0", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("-1234567890987654321");
+
+      b :- NEW Bignum("9876543211234456789");
+
+      c :- a.Add(b);
+
+      add_test.TestText("-1234567890987654321 + 9876543211234456789", "8641975320246802468", c.ToString);
+   END;
+
+   add_test.PrintTestResults;
+END;

@@ -1,0 +1,462 @@
+CLASS Bignum(str); TEXT str;
+BEGIN
+   INTEGER Sign;
+   TEXT Digits;
+
+   REF(Bignum) PROCEDURE Add(other); REF(Bignum) other;
+   BEGIN
+      INTEGER carry, i, max_digits, result_sign;
+      TEXT result_digits;
+
+      IF Sign = other.Sign THEN
+      BEGIN
+         IF Digits.Length > other.Digits.Length THEN
+         BEGIN
+            result_digits :- Blanks(Digits.Length + 1);
+
+            max_digits := Digits.Length + 1;
+         END ELSE BEGIN
+            result_digits :- Blanks(other.Digits.Length + 1);
+
+            max_digits := other.Digits.Length + 1;
+         END;
+
+         result_sign := Sign;
+
+         carry := 0;
+
+         i := 1;
+
+         WHILE i <= max_Digits DO
+         BEGIN
+            INTEGER x, y, z, q, r;
+            TEXT c;
+
+            IF i <= Digits.Length THEN
+            BEGIN
+               x := Digits.Sub(i, 1).GetInt;
+            END ELSE BEGIN
+               x := 0;
+            END;
+
+            IF i <= other.Digits.Length THEN
+            BEGIN
+               y := other.Digits.Sub(i, 1).GetInt;
+            END ELSE BEGIN
+               y := 0;
+            END;
+
+            z := carry + x + y;
+
+            q := z // 10;
+
+            r := z - (q * 10);
+
+            c :- Blanks(1);
+
+            c.PutInt(r);
+
+            c.SetPos(1);
+
+            result_digits.SetPos(i);
+
+            result_digits.PutChar(c.GetChar);
+
+            carry := q;
+
+            i := i + 1;
+         END;
+
+         i := 0;
+
+         WHILE i < result_digits.Length // 2 DO
+         BEGIN
+            CHARACTER a, b;
+
+            result_digits.SetPos(result_digits.Length - i);
+
+            a := result_digits.GetChar;
+
+            result_digits.SetPos(i + 1);
+
+            b := result_digits.GetChar;
+
+            result_digits.SetPos(result_digits.Length - i);
+
+            result_digits.PutChar(b);
+
+            result_digits.SetPos(i + 1);
+
+            result_digits.PutChar(a);
+
+            i := i + 1;
+         END;
+
+         IF result_sign = -1 THEN
+         BEGIN
+            TEXT negative_result_digits;
+            INTEGER i;
+
+            i := 1;
+
+            result_digits.SetPos(i);
+
+            WHILE result_digits.GetChar = '0' DO
+            BEGIN
+               i := i + 1;
+            END;
+
+            negative_result_digits :- Blanks((result_digits.Length - i) + 2);
+
+            negative_result_digits.PutChar('-');
+
+            result_digits.SetPos(i);
+
+            WHILE result_digits.More DO
+            BEGIN
+               negative_result_digits.PutChar(result_digits.GetChar);
+            END;
+
+            result_digits :- negative_result_digits;
+         END;
+
+         Add :- NEW Bignum(result_digits);
+      END ELSE BEGIN
+         REF(Bignum) result;
+
+         IF Sign = -1 THEN
+         BEGIN
+            REF(Bignum) self;
+
+            Sign := 1;
+
+            self :- NEW Bignum(ToString);
+
+            Add :- other.Subtract(self);
+
+            Sign := -1;
+         END ELSE BEGIN
+            Other.Sign := 1;
+
+            Add :- Subtract(other);
+
+            other.Sign := -1
+         END;
+      END;
+   END;
+
+   INTEGER PROCEDURE Compare(other); REF(Bignum) other;
+   BEGIN
+      INTEGER i, result;
+      BOOLEAN found;
+
+      found := FALSE;
+
+      IF Sign = -1 AND other.Sign = 1 THEN
+      BEGIN
+         result := -1;
+
+         found := TRUE;
+      END;
+
+      IF Sign = 1 AND other.Sign = -1 THEN
+      BEGIN
+         result := 1;
+
+         found := TRUE;
+      END;
+
+      IF other.Digits.Length > Digits.Length THEN
+      BEGIN
+         result := -1 * Sign;
+
+         found := TRUE;
+      END;
+
+      IF Digits.Length > other.Digits.Length THEN
+      BEGIN
+         result := Sign;
+
+         found := TRUE;
+      END;
+
+      i := Digits.Length;
+
+      WHILE i > 0 AND NOT found DO
+      BEGIN
+         INTEGER x, y;
+
+         x := Digits.Sub(i, 1).GetInt;
+
+         y := other.Digits.Sub(i, 1).GetInt;
+
+         IF x > y THEN
+         BEGIN
+            result := Sign;
+
+            found := TRUE;
+         END;
+
+         IF y > x THEN
+         BEGIN
+            result := -1 * Sign;
+
+            found := TRUE;
+         END;
+
+         i := i - 1;
+      END;
+
+      IF NOT found THEN
+      BEGIN
+         result := 0;
+      END;
+
+      Compare := result;
+   END;
+
+   REF(Bignum) PROCEDURE Subtract(other); REF(Bignum) other;
+   BEGIN
+      INTEGER borrow, i, max_Digits;
+      TEXT result_digits;
+
+      IF Sign = -1 OR other.Sign = -1 THEN
+      BEGIN
+         other.Sign := -1 * other.Sign;
+
+         Subtract :- Add(other);
+
+         other.Sign := -1 * other.Sign;
+      END ELSE BEGIN
+         IF Compare(other) = -1 THEN
+         BEGIN
+            REF(Bignum) self, result;
+
+            self :- NEW Bignum(ToString);
+
+            result :- other.Subtract(self);
+
+            result.Sign := -1;
+
+            Subtract :- result;
+         END ELSE BEGIN
+            IF Digits.Length > other.Digits.Length THEN
+            BEGIN
+               result_digits :- Blanks(Digits.Length + 1);
+
+               max_digits := Digits.Length + 1;
+            END ELSE BEGIN
+               result_digits :- Blanks(other.Digits.Length + 1);
+
+               max_digits := other.Digits.Length + 1;
+            END;
+
+            borrow := 0;
+
+            i := 1;
+
+            WHILE i <= Digits.Length DO
+            BEGIN
+               INTEGER x, y, z, q, r;
+               TEXT c;
+
+               IF i <= Digits.Length THEN
+               BEGIN
+                  x := Digits.Sub(i, 1).GetInt;
+               END ELSE BEGIN
+                  x := 0;
+               END;
+
+               IF i <= other.Digits.Length THEN
+               BEGIN
+                  y := other.Digits.Sub(i, 1).GetInt;
+               END ELSE BEGIN
+                  y := 0;
+               END;
+
+               z := x - borrow - y;
+
+               IF x > 0 THEN
+               BEGIN
+                  borrow := 0;
+               END;
+
+               IF z < 0 THEN
+               BEGIN
+                  z := z + 10;
+
+                  borrow := 1;
+               END;
+
+               q := z // 10;
+
+               r := z - (q * 10);
+
+               c :- Blanks(1);
+
+               c.PutInt(r);
+
+               c.SetPos(1);
+
+               result_digits.SetPos(i);
+
+               result_digits.PutChar(c.GetChar);
+
+               i := i + 1;
+            END;
+
+            i := 0;
+
+            WHILE i < result_digits.Length // 2 DO
+            BEGIN
+               CHARACTER a, b;
+
+               result_digits.SetPos(result_digits.Length - i);
+
+               a := result_digits.GetChar;
+
+               result_digits.SetPos(i + 1);
+
+               b := result_digits.GetChar;
+
+               result_digits.SetPos(result_digits.Length - i);
+
+               result_digits.PutChar(b);
+
+               result_digits.SetPos(i + 1);
+
+               result_digits.PutChar(a);
+
+               i := i + 1;
+            END;
+
+            Subtract :- NEW Bignum(result_digits);
+         END;
+      END;
+   END;
+
+   PROCEDURE Print;
+   BEGIN
+      INTEGER i;
+
+      i := Digits.Length;
+
+      WHILE i >= 1 DO
+      BEGIN
+         Digits.SetPos(i);
+
+         OutChar(Digits.GetChar);
+
+         i := i - 1;
+      END;
+   END;
+
+   TEXT PROCEDURE ToString;
+   BEGIN
+      TEXT string;
+      INTEGER i;
+
+      IF Sign = -1 THEN
+      BEGIN
+         string :- Blanks(Digits.Length + 1);
+
+         string.PutChar('-');
+      END ELSE BEGIN
+         string :- Blanks(Digits.Length);
+      END;
+
+      i := Digits.Length;
+
+      WHILE i >= 1 DO
+      BEGIN
+         Digits.SetPos(i);
+
+         string.PutChar(Digits.GetChar);
+
+         i := i - 1;
+      END;
+
+      ToString :- string;
+   END;
+
+   BEGIN
+      INTEGER i, start_offset;
+      BOOLEAN start_found;
+
+      i := 1;
+
+      start_found := FALSE;
+
+      Sign := 1;
+
+      WHILE i <= str.Length AND NOT start_found DO
+      BEGIN
+         CHARACTER d;
+
+         str.SetPos(i);
+
+         d := str.GetChar;
+
+         IF (Digit(d) OR d = '-' OR d = '+') AND d <> '0' THEN
+         BEGIN
+            start_found := TRUE;
+
+            start_offset := i;
+         END ELSE BEGIN
+            i := i + 1;
+         END;
+      END;
+
+      IF start_found THEN
+      BEGIN
+         CHARACTER d;
+
+         str.SetPos(start_offset);
+
+         d := str.GetChar;
+
+         IF d = '-' THEN
+         BEGIN
+            Sign := -1;
+
+            start_offset := start_offset + 1;
+
+            i := i + 1;
+         END;
+
+         IF d = '+' THEN
+         BEGIN
+            Sign := 1;
+
+            start_offset := start_offset + 1;
+
+            i := i + 1;
+         END;
+
+         str.SetPos(str.Length - i + Start_offset);
+
+         Digits :- Blanks(str.Length - start_offset + 1);
+
+         WHILE i <= str.Length DO
+         BEGIN
+            CHARACTER d;
+
+            str.SetPos(str.Length - i + start_offset);
+
+            d := str.GetChar;
+
+            Digits.SetPos(i - start_offset + 1);
+
+            Digits.PutChar(d);
+
+            i := i + 1;
+         END;
+      END ELSE BEGIN
+         Sign := 1;
+
+         Digits :- Blanks(1);
+
+         Digits := "0";
+      END;
+   END;
+END;

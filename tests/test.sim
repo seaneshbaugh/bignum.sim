@@ -1,0 +1,193 @@
+CLASS Test(SuiteName); TEXT SuiteName;
+BEGIN
+   REF(TestResult) test_results_head;
+   REF(TestResult) test_results_tail;
+
+   CLASS TestResult(Message, Passed, Expected, Result); TEXT Message, Expected, Result; BOOLEAN Passed;
+   BEGIN
+      REF(TestResult) Next;
+
+      PROCEDURE PrintMessage;
+      BEGIN
+         IF NOT Passed THEN
+         BEGIN
+            OutText("Failed: '");
+            OutText(Message);
+            OutText("'. Expected ");
+            OutText(Expected);
+            OutText(" but got ");
+            OutText(Result);
+            OutText(".");
+            OutImage;
+         END;
+      END;
+
+      PROCEDURE PrintPassed;
+      BEGIN
+         IF Passed THEN
+         BEGIN
+            OutText("*");
+         END ELSE BEGIN
+            OutText("F");
+         END;
+      END;
+   END;
+
+   PROCEDURE AddTestResult(test_result); REF(TestResult) test_result;
+   BEGIN
+      IF test_results_head == NONE THEN
+      BEGIN
+         test_results_head :- test_results_tail :- test_result;
+      END ELSE BEGIN
+         test_results_tail.Next :- test_result;
+
+         test_results_tail :- test_result;
+      END;
+   END;
+
+   PROCEDURE PrintTestResults;
+   BEGIN
+      REF(TestResult) test_result;
+      INTEGER total_tests, tests_passed;
+
+      total_tests := 0;
+
+      tests_passed := 0;
+
+      OutText("Results for ");
+      OutText(SuiteName);
+      OutImage;
+
+      test_result :- test_results_head;
+
+      WHILE test_result =/= NONE DO
+      BEGIN
+         test_result.PrintPassed;
+
+         total_tests := total_tests + 1;
+
+         IF test_result.Passed THEN
+         BEGIN
+            tests_passed := tests_passed + 1;
+         END;
+
+         test_result :- test_result.Next;
+      END;
+
+      OutImage;
+
+      test_result :- test_results_head;
+
+      WHILE test_result =/= NONE DO
+      BEGIN
+         test_result.PrintMessage;
+
+         test_result :- test_result.Next;
+      END;
+
+      OutImage;
+      OutFix(tests_passed, 0, 0);
+      OutText(" / ");
+      OutFix(total_tests, 0, 0);
+      OutText(" tests passed.");
+      OutImage;
+   END;
+
+   ! BOOLEAN PROCEDURE TestBoolean(message, expected, result)!!\ TEXT message!!\ BOOLEAN expected, result!!\ ;
+   ! BEGIN ;
+   !    IF expected = result THEN ;
+   !    BEGIN ;
+   !       OutText("*")!!\ ;
+
+   !       TestInteger := TRUE!!\ ;
+   !    END ELSE BEGIN ;
+   !       OutText("F")!!\ ;
+
+   !       TestInteger := FALSE!!\ ;
+   !    END!!\ ;
+   ! END!!\ ;
+
+   BOOLEAN PROCEDURE TestInteger(message, expected, result); TEXT message; INTEGER expected, result;
+   BEGIN
+      TEXT expected_text, result_text;
+
+      expected_text :- Blanks(12);
+
+      expected_text.PutInt(expected);
+
+      BEGIN
+         INTEGER i;
+         BOOLEAN found;
+
+         i := 1;
+
+         found := FALSE;
+
+         WHILE i <= expected_text.Length AND NOT found DO
+         BEGIN
+            expected_text.SetPos(i);
+
+            IF expected_text.GetChar <> ' ' THEN
+            BEGIN
+               expected_text :- expected_text.Sub(i, expected_text.Length - i + 1);
+
+               found := TRUE;
+            END;
+
+            i := i + 1;
+         END;
+      END;
+
+      result_text :- Blanks(11);
+
+      result_text.PutInt(result);
+
+      BEGIN
+         INTEGER i;
+         BOOLEAN found;
+
+         i := 1;
+
+         found := FALSE;
+
+         WHILE i <= result_text.Length AND NOT found DO
+         BEGIN
+            result_text.SetPos(i);
+
+            IF result_text.GetChar <> ' ' THEN
+            BEGIN
+               result_text :- result_text.Sub(i, result_text.Length - i + 1);
+
+               found := TRUE;
+            END;
+
+            i := i + 1;
+         END;
+      END;
+
+      IF expected = result THEN
+      BEGIN
+         AddTestResult(NEW TestResult(message, TRUE, expected_text, result_text));
+
+         TestInteger := TRUE;
+      END ELSE BEGIN
+         AddTestResult(NEW TestResult(message, FALSE, expected_text, result_text));
+
+         TestInteger := FALSE;
+      END;
+   END;
+
+   BOOLEAN PROCEDURE TestText(message, expected, result); TEXT message, expected, result;
+   BEGIN
+      IF expected = result THEN
+      BEGIN
+         AddTestResult(NEW TestResult(message, TRUE, expected, result));
+
+         TestText := TRUE;
+      END ELSE BEGIN
+         AddTestResult(NEW TestResult(message, FALSE, expected, result));
+
+         TestText := FALSE;
+      END;
+   END;
+END;

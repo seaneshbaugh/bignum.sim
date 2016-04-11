@@ -1,0 +1,101 @@
+EXTERNAL CLASS Bignum;
+EXTERNAL CLASS Test;
+
+BEGIN
+   REF(Test) compare_test;
+
+   compare_test :- NEW Test("compare_test.sim");
+
+   BEGIN
+      REF(Bignum) a, b;
+      INTEGER c;
+
+      a :- NEW Bignum("10");
+
+      b :- NEW Bignum("5");
+
+      c := a.Compare(b);
+
+      compare_test.TestInteger("cmp 10, 5 = 1", 1, c);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b;
+      INTEGER c;
+
+      a :- NEW Bignum("0");
+
+      b :- NEW Bignum("0");
+
+      c := a.Compare(b);
+
+      compare_test.TestInteger("cmp 0, 0 = 0", 0, c);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b;
+      INTEGER c;
+
+      a :- NEW Bignum("100");
+
+      b :- NEW Bignum("-100");
+
+      c := a.Compare(b);
+
+      compare_test.TestInteger("cmp 100, -100 = 1", 1, c);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b;
+      INTEGER c;
+
+      a :- NEW Bignum("-100");
+
+      b :- NEW Bignum("100");
+
+      c := a.Compare(b);
+
+      compare_test.TestInteger("cmp -100, 100 = -1", -1, c);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b;
+      INTEGER c;
+
+      a :- NEW Bignum("123456");
+
+      b :- NEW Bignum("123457");
+
+      c := a.Compare(b);
+
+      compare_test.TestInteger("cmp 123456, 123457 = -1", -1, c);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b;
+      INTEGER c;
+
+      a :- NEW Bignum("-123456");
+
+      b :- NEW Bignum("-123457");
+
+      c := a.Compare(b);
+
+      compare_test.TestInteger("cmp -123456, -123457 = 1", 1, c);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b;
+      INTEGER c;
+
+      a :- NEW Bignum("987654321");
+
+      b :- NEW Bignum("887654321");
+
+      c := a.Compare(b);
+
+      compare_test.TestInteger("cmp 987654321, 887654321 = 1", 1, c);
+   END;
+
+   compare_test.PrintTestResults;
+END;

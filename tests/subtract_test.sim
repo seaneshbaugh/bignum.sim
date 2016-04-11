@@ -1,0 +1,58 @@
+EXTERNAL CLASS Bignum;
+EXTERNAL CLASS Test;
+
+BEGIN
+   REF(Test) subtract_test;
+
+   subtract_test :- NEW Test("subtract_test.sim");
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("10");
+
+      b :- NEW Bignum("5");
+
+      c :- a.Subtract(b);
+
+      subtract_test.TestText("10 - 5", "5", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("-1");
+
+      b :- NEW Bignum("-1");
+
+      c :- a.Subtract(b);
+
+      subtract_test.TestText("-1 - -1", "0", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("1");
+
+      b :- NEW Bignum("-1");
+
+      c :- a.Subtract(b);
+
+      subtract_test.TestText("1 - -1", "2", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("-1234567890987654321");
+
+      b :- NEW Bignum("9876543211234456789");
+
+      c :- a.Subtract(b);
+
+      subtract_test.TestText("-1234567890987654321 + 9876543211234456789", "-11111111102222111110", c.ToString);
+   END;
+
+   subtract_test.PrintTestResults;
+END;

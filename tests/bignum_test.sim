@@ -1,0 +1,26 @@
+EXTERNAL CLASS Bignum;
+EXTERNAL CLASS Test;
+
+BEGIN
+   REF(Test) bignum_test;
+
+   bignum_test :- NEW Test("bignum_test.sim");
+
+   BEGIN
+      REF(Bignum) a;
+
+      a :- NEW Bignum("12345");
+
+      bignum_test.TestText("Bignum digits are reversed upon instantiation", "54321", a.Digits);
+   END;
+
+   BEGIN
+      REF(Bignum) a;
+
+      a :- NEW Bignum("-1");
+
+      bignum_test.TestInteger("Bignum should set the sign to negative if the numer starts with '-'", -1, a.Sign);
+   END;
+
+   bignum_test.PrintTestResults;
+END;
