@@ -349,6 +349,32 @@ BEGIN
       Divide :- result;
    END;
 
+   REF(Bignum) PROCEDURE Modulo(other); REF(Bignum) other;
+   BEGIN
+      REF(Bignum) quotient, remainder;
+      INTEGER remainder_sign, asign, bsign;
+
+      asign := Sign;
+
+      bsign := other.Sign;
+
+      Sign := 1;
+
+      other.Sign := 1;
+
+      quotient :- Divide(other);
+
+      remainder :- Subtract(quotient.Multiply(other));
+
+      Sign := asign;
+
+      other.Sign := bsign;
+
+      remainder.Sign := Sign * other.Sign;
+
+      Modulo :- remainder;
+   END;
+
    REF(Bignum) PROCEDURE Multiply(other); REF(Bignum) other;
    BEGIN
       INTEGER i;

@@ -8,7 +8,7 @@ Supports the following operations:
 * DigitShiftLeft
 * DigitShiftRight
 * Divide
-* ~~Modulo~~
+* Modulo
 * Multiply
 * Print
 * Subtract
@@ -167,6 +167,28 @@ Divide two numbers. Returns only the quotient as a new Bignum as the result.
     c :- a.Divide(b);
 
     c.Print; ! prints "4";
+
+#### Modulo
+
+##### Signature
+
+    REF(Bignum) PROCEDURE Modulo(other); REF(Bignum) other;
+
+##### Description
+
+Modulo division of two numbers. Returns only the remainder as a new Bignum as the result.
+
+##### Example
+
+    REF(Bignum) a, b, c;
+
+    a :- NEW Bignum("19");
+
+    b :- NEW Bignum("4");
+
+    c :- a.Modulo(b);
+
+    c.Print; ! prints "3";
 
 #### Multiply
 

@@ -8,7 +8,12 @@ TEST_FILES=\
 	test/bignum_test.sim \
 	test/add_test.sim \
 	test/compare_test.sim \
-	test/subtract_test.sim
+	test/digit_left_shift_test.sim \
+	test/digit_right_shift_test.sim \
+	test/divide_test.sim \
+	test/modulo_test.sim \
+	test/subtract_test.sim \
+	test/to_string_test.sim
 
 all: default
 
@@ -31,6 +36,7 @@ build_tests:
 	$(SIMULA) -o ../build/digit_left_shift_test ../tests/digit_left_shift_test.sim; \
 	$(SIMULA) -o ../build/digit_right_shift_test ../tests/digit_right_shift_test.sim; \
 	$(SIMULA) -o ../build/divide_test ../tests/divide_test.sim; \
+	$(SIMULA) -o ../build/modulo_test ../tests/modulo_test.sim; \
 	$(SIMULA) -o ../build/multiply_test ../tests/multiply_test.sim; \
 	$(SIMULA) -o ../build/subtract_test ../tests/subtract_test.sim; \
 	$(SIMULA) -o ../build/to_string_test ../tests/to_string_test.sim; \
@@ -43,6 +49,7 @@ run_tests:
 	./build/digit_left_shift_test
 	./build/digit_right_shift_test
 	./build/divide_test
+	./build/modulo_test
 	./build/multiply_test
 	./build/subtract_test
 	./build/to_string_test

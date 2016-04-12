@@ -1,0 +1,58 @@
+EXTERNAL CLASS Bignum;
+EXTERNAL CLASS Test;
+
+BEGIN
+   REF(Test) modulo_test;
+
+   modulo_test :- NEW Test("modulo_test.sim");
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("101");
+
+      b :- NEW Bignum("20");
+
+      c :- a.Modulo(b);
+
+      modulo_test.TestText("101 % 20", "1", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("10");
+
+      b :- NEW Bignum("1");
+
+      c :- a.Modulo(b);
+
+      modulo_test.TestText("10 % 1", "0", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("317977650334071518485026362387538858889316654313230836594648595956727");
+
+      b :- NEW Bignum("897361346553717988026950648");
+
+      c :- a.Modulo(b);
+
+      modulo_test.TestText("317977650334071518485026362387538858889316654313230836594648595956727 % 897361346553717988026950648", "878946574194397708884627695", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("14");
+
+      b :- NEW Bignum("-4");
+
+      c :- a.Modulo(b);
+
+      modulo_test.TestText("14 % -4", "-2", c.ToString);
+   END;
+
+   modulo_test.PrintTestResults;
+END;
