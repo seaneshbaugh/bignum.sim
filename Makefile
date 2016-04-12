@@ -26,16 +26,24 @@ build_tests:
 	sleep 1; \
 	$(SIMULA) -o test.o ../tests/test.sim; \
 	$(SIMULA) -o ../build/bignum_test ../tests/bignum_test.sim; \
-	$(SIMULA) -o ../build/compare_test ../tests/compare_test.sim; \
 	$(SIMULA) -o ../build/add_test ../tests/add_test.sim; \
+	$(SIMULA) -o ../build/compare_test ../tests/compare_test.sim; \
+	$(SIMULA) -o ../build/digit_left_shift_test ../tests/digit_left_shift_test.sim; \
+	$(SIMULA) -o ../build/digit_right_shift_test ../tests/digit_right_shift_test.sim; \
+	$(SIMULA) -o ../build/multiply_test ../tests/multiply_test.sim; \
 	$(SIMULA) -o ../build/subtract_test ../tests/subtract_test.sim; \
+	$(SIMULA) -o ../build/to_string_test ../tests/to_string_test.sim; \
 	cd ..
 
 run_tests:
 	./build/bignum_test
 	./build/add_test
 	./build/compare_test
+	./build/digit_left_shift_test
+	./build/digit_right_shift_test
+	./build/multiply_test
 	./build/subtract_test
+	./build/to_string_test
 
 clean:
 	rm -rf build

@@ -1,0 +1,20 @@
+EXTERNAL CLASS Bignum;
+EXTERNAL CLASS Test;
+
+BEGIN
+   REF(Test) digit_left_shift_test;
+
+   digit_left_shift_test :- NEW Test("digit_left_shift_test.sim");
+
+   BEGIN
+      REF(Bignum) a;
+
+      a :- NEW Bignum("1");
+
+      a.DigitLeftShift(10);
+
+      digit_left_shift_test.TestText("1 << 10", "10000000000", a.ToString);
+   END;
+
+   digit_left_shift_test.PrintTestResults;
+END;

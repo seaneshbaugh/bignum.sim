@@ -1,0 +1,40 @@
+EXTERNAL CLASS Bignum;
+EXTERNAL CLASS Test;
+
+BEGIN
+   REF(Test) digit_right_shift_test;
+
+   digit_right_shift_test :- NEW Test("digit_right_shift_test.sim");
+
+   BEGIN
+      REF(Bignum) a;
+
+      a :- NEW Bignum("100");
+
+      a.DigitRightShift(2);
+
+      digit_right_shift_test.TestText("100 >> 2", "1", a.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a;
+
+      a :- NEW Bignum("0");
+
+      a.DigitRightShift(2);
+
+      digit_right_shift_test.TestText("0 >> 2", "0", a.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a;
+
+      a :- NEW Bignum("1234567890");
+
+      a.DigitRightShift(4);
+
+      digit_right_shift_test.TestText("1234567890 >> 4", "123456", a.ToString);
+   END;
+
+   digit_right_shift_test.PrintTestResults;
+END;

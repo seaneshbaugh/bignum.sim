@@ -1,0 +1,34 @@
+EXTERNAL CLASS Bignum;
+EXTERNAL CLASS Test;
+
+BEGIN
+   REF(Test) to_string_test;
+
+   to_string_test :- NEW Test("to_string_test.sim");
+
+   BEGIN
+      REF(Bignum) a;
+
+      a :- NEW Bignum("2146314");
+
+      to_string_test.TestText("2146314 as string1", "2146314", a.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a;
+
+      a :- NEW Bignum("-1519582");
+
+      to_string_test.TestText("1519582 as string", "-1519582", a.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a;
+
+      a :- NEW Bignum("0");
+
+      to_string_test.TestText("0 as string", "0", a.ToString);
+   END;
+
+   to_string_test.PrintTestResults;
+END;

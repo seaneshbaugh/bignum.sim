@@ -27,7 +27,7 @@ BEGIN
 
          i := 1;
 
-         WHILE i <= max_Digits DO
+         WHILE i <= max_digits DO
          BEGIN
             INTEGER x, y, z, q, r;
             TEXT c;
@@ -215,6 +215,100 @@ BEGIN
       Compare := result;
    END;
 
+   PROCEDURE DigitLeftShift(d); INTEGER d;
+   BEGIN
+      IF Digits.Length > 0 AND d > 0 THEN
+      BEGIN
+         TEXT new_digits;
+         INTEGER i;
+
+         new_digits :- Blanks(Digits.Length + d);
+
+         i := 0;
+
+         WHILE i < d DO
+         BEGIN
+            new_digits.PutChar('0');
+
+            i := i + 1;
+         END;
+
+         Digits.SetPos(1);
+
+         WHILE Digits.More DO
+         BEGIN
+            new_digits.PutChar(Digits.GetChar);
+         END;
+
+         Digits :- new_digits;
+      END;
+   END;
+
+   PROCEDURE DigitRightShift(d); INTEGER d;
+   BEGIN
+      IF Digits.Length > 0 AND d > 0 AND d < Digits.Length THEN
+      BEGIN
+         Digits :- Digits.Sub(d + 1, Digits.Length - d);
+      END;
+   END;
+
+   REF(Bignum) PROCEDURE Multiply(other); REF(Bignum) other;
+   BEGIN
+      INTEGER i;
+      REF(Bignum) row, tmp, result;
+
+      row :- NEW Bignum(ToString);
+
+      result :- NEW Bignum("0");
+
+      i := 1;
+
+      WHILE i <= other.Digits.Length DO
+      BEGIN
+         INTEGER j, d;
+
+         d := other.Digits.Sub(i, 1).GetInt;
+
+         j := 1;
+
+         WHILE j <= d DO
+         BEGIN
+            result :- result.Add(row);
+
+            j := j + 1;
+         END;
+
+         row.DigitLeftShift(1);
+
+         i := i + 1;
+      END;
+
+      result.Sign := Sign * other.Sign;
+
+      Multiply :- result;
+   END;
+
+   PROCEDURE Print;
+   BEGIN
+      INTEGER i;
+
+      IF Sign = -1 THEN
+      BEGIN
+         OutChar('-');
+      END;
+
+      i := Digits.Length;
+
+      WHILE i >= 1 DO
+      BEGIN
+         Digits.SetPos(i);
+
+         OutChar(Digits.GetChar);
+
+         i := i - 1;
+      END;
+   END;
+
    REF(Bignum) PROCEDURE Subtract(other); REF(Bignum) other;
    BEGIN
       INTEGER borrow, i, max_Digits;
@@ -332,22 +426,6 @@ BEGIN
 
             Subtract :- NEW Bignum(result_digits);
          END;
-      END;
-   END;
-
-   PROCEDURE Print;
-   BEGIN
-      INTEGER i;
-
-      i := Digits.Length;
-
-      WHILE i >= 1 DO
-      BEGIN
-         Digits.SetPos(i);
-
-         OutChar(Digits.GetChar);
-
-         i := i - 1;
       END;
    END;
 

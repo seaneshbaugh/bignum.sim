@@ -1,0 +1,46 @@
+EXTERNAL CLASS Bignum;
+EXTERNAL CLASS Test;
+
+BEGIN
+   REF(Test) multiply_test;
+
+   multiply_test :- NEW Test("multiply_test.sim");
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("1361");
+
+      b :- NEW Bignum("781");
+
+      c :- a.Multiply(b);
+
+      multiply_test.TestText("1361 * 781", "1062941", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("67539426568702619842637182567143645250028623315563450894196988936705");
+
+      b :- NEW Bignum("68524542822663923934863267328397327");
+
+      c :- a.Multiply(b);
+
+      multiply_test.TestText("67539426568702619842637182567143645250028623315563450894196988936705 * 68524542822663923934863267328397327", "4628108328125228240236280263209148105143833610112936506126796354150396186631317185195943493497494187535", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("20");
+
+      b :- NEW Bignum("-3");
+
+      c :- a.Multiply(b);
+
+      multiply_test.TestText("20 * -3", "-60", c.ToString);
+   END;
+
+   multiply_test.PrintTestResults;
+END;
