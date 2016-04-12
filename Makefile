@@ -30,6 +30,7 @@ build_tests:
 	$(SIMULA) -o ../build/compare_test ../tests/compare_test.sim; \
 	$(SIMULA) -o ../build/digit_left_shift_test ../tests/digit_left_shift_test.sim; \
 	$(SIMULA) -o ../build/digit_right_shift_test ../tests/digit_right_shift_test.sim; \
+	$(SIMULA) -o ../build/divide_test ../tests/divide_test.sim; \
 	$(SIMULA) -o ../build/multiply_test ../tests/multiply_test.sim; \
 	$(SIMULA) -o ../build/subtract_test ../tests/subtract_test.sim; \
 	$(SIMULA) -o ../build/to_string_test ../tests/to_string_test.sim; \
@@ -41,6 +42,7 @@ run_tests:
 	./build/compare_test
 	./build/digit_left_shift_test
 	./build/digit_right_shift_test
+	./build/divide_test
 	./build/multiply_test
 	./build/subtract_test
 	./build/to_string_test

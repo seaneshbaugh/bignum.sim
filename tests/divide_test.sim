@@ -1,0 +1,58 @@
+EXTERNAL CLASS Bignum;
+EXTERNAL CLASS Test;
+
+BEGIN
+   REF(Test) divide_test;
+
+   divide_test :- NEW Test("divide_test.sim");
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("100");
+
+      b :- NEW Bignum("20");
+
+      c :- a.Divide(b);
+
+      divide_test.TestText("100 / 20", "5", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("10");
+
+      b :- NEW Bignum("1");
+
+      c :- a.Divide(b);
+
+      divide_test.TestText("10 / 1", "10", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("317977650334071518485026362387538858889316654313230836594648595956727");
+
+      b :- NEW Bignum("897361346553717988026950648");
+
+      c :- a.Divide(b);
+
+      divide_test.TestText("317977650334071518485026362387538858889316654313230836594648595956727 / 897361346553717988026950648", "354347389215339564075791769700578063312159", c.ToString);
+   END;
+
+   BEGIN
+      REF(Bignum) a, b, c;
+
+      a :- NEW Bignum("14");
+
+      b :- NEW Bignum("-4");
+
+      c :- a.Divide(b);
+
+      divide_test.TestText("14 / -4", "-3", c.ToString);
+   END;
+
+   divide_test.PrintTestResults;
+END;

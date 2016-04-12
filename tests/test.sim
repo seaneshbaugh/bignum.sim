@@ -91,6 +91,7 @@ BEGIN
       OutFix(total_tests, 0, 0);
       OutText(" tests passed.");
       OutImage;
+      OutImage;
    END;
 
    ! BOOLEAN PROCEDURE TestBoolean(message, expected, result)!!\ TEXT message!!\ BOOLEAN expected, result!!\ ;

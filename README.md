@@ -5,7 +5,10 @@ Integer Bignum library for Simula.
 Supports the following operations:
 
 * Add
-* ~~Divide~~
+* DigitShiftLeft
+* DigitShiftRight
+* Divide
+* ~~Modulo~~
 * Multiply
 * Print
 * Subtract
@@ -69,7 +72,7 @@ All that's really necessary is for the `bignum.atr` and `bignum.o` files to be i
 
 ##### Description
 
-Adds two numbers. Returns a new Bignum with the result.
+Adds two numbers. Returns a new Bignum as the result.
 
 ##### Example
 
@@ -143,6 +146,28 @@ Shift a number's digits to the right d times. Destructively modifies the number 
 
     a.Print; ! prints "12";
 
+#### Divide
+
+##### Signature
+
+    REF(Bignum) PROCEDURE Divide(other); REF(Bignum) other;
+
+##### Description
+
+Divide two numbers. Returns only the quotient as a new Bignum as the result.
+
+##### Example
+
+    REF(Bignum) a, b, c;
+
+    a :- NEW Bignum("100");
+
+    b :- NEW Bignum("25");
+
+    c :- a.Divide(b);
+
+    c.Print; ! prints "4";
+
 #### Multiply
 
 ##### Signature
@@ -151,7 +176,7 @@ Shift a number's digits to the right d times. Destructively modifies the number 
 
 ##### Description
 
-Multiply two numbers. Returns a new Bignum with the result.
+Multiply two numbers. Returns a new Bignum as the result.
 
 ##### Example
 
@@ -163,7 +188,7 @@ Multiply two numbers. Returns a new Bignum with the result.
 
     c :- a.Multiply(b);
 
-    c.Print; ! prints "4";
+    c.Print; ! prints "8";
 
 #### Print
 
@@ -182,6 +207,28 @@ Prints a number to standard out.
     a :- NEW Bignum("9876");
 
     a.Print; ! prints "9876";
+
+#### Subtract
+
+##### Signature
+
+    REF(Bignum) PROCEDURE Subtract(other); REF(Bignum) other;
+
+##### Description
+
+Subtract a number from another number. Returns a new Bignum as the result.
+
+##### Example
+
+    REF(Bignum) a, b, c;
+
+    a :- NEW Bignum("11");
+
+    b :- NEW Bignum("9");
+
+    c :- a.Subtract(b);
+
+    c.Print; ! prints "2";
 
 #### ToString
 

@@ -16,5 +16,15 @@ BEGIN
       digit_left_shift_test.TestText("1 << 10", "10000000000", a.ToString);
    END;
 
+   BEGIN
+      REF(Bignum) a;
+
+      a :- NEW Bignum("0");
+
+      a.DigitLeftShift(1);
+
+      digit_left_shift_test.TestText("0 << 1", "0", a.ToString);
+   END;
+
    digit_left_shift_test.PrintTestResults;
 END;

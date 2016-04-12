@@ -11,7 +11,7 @@ BEGIN
 
       a :- NEW Bignum("2146314");
 
-      to_string_test.TestText("2146314 as string1", "2146314", a.ToString);
+      to_string_test.TestText("2146314 as string", "2146314", a.ToString);
    END;
 
    BEGIN

@@ -217,7 +217,7 @@ BEGIN
 
    PROCEDURE DigitLeftShift(d); INTEGER d;
    BEGIN
-      IF Digits.Length > 0 AND d > 0 THEN
+      IF Digits.Length > 0 AND d > 0 AND Digits <> "0" THEN
       BEGIN
          TEXT new_digits;
          INTEGER i;
@@ -250,6 +250,103 @@ BEGIN
       BEGIN
          Digits :- Digits.Sub(d + 1, Digits.Length - d);
       END;
+   END;
+
+   REF(Bignum) PROCEDURE Divide(other); REF(Bignum) other;
+   BEGIN
+      REF(Bignum) row, result;
+      INTEGER result_sign, asign, bsign, i;
+      TEXT result_digits;
+
+      result_digits :- Blanks(Digits.Length);
+
+      result_digits.SetPos(1);
+
+      WHILE result_digits.More DO
+      BEGIN
+         result_digits.PutChar('0');
+      END;
+
+      result_sign := Sign * other.Sign;
+
+      asign := Sign;
+
+      bsign := other.Sign;
+
+      Sign := 1;
+
+      other.Sign := 1;
+
+      row :- NEW Bignum("0");
+
+      i := Digits.Length;
+
+      WHILE i >= 1 DO
+      BEGIN
+         row.DigitLeftShift(1);
+
+         row.Digits.SetPos(1);
+
+         Digits.SetPos(i);
+
+         row.Digits.PutChar(Digits.GetChar);
+
+         result_digits.SetPos(i);
+
+         result_digits.PutChar('0');
+
+         WHILE row.Compare(other) <> -1 DO
+         BEGIN
+            TEXT d;
+
+            d :- Blanks(1);
+
+            d.PutInt(result_digits.Sub(i, 1).GetInt + 1);
+
+            result_digits.SetPos(i);
+
+            d.SetPos(1);
+
+            result_digits.PutChar(d.GetChar);
+
+            row :- row.Subtract(other);
+         END;
+
+         i := i - 1;
+      END;
+
+      WHILE i < result_digits.Length // 2 DO
+      BEGIN
+         CHARACTER a, b;
+
+         result_digits.SetPos(result_digits.Length - i);
+
+         a := result_digits.GetChar;
+
+         result_digits.SetPos(i + 1);
+
+         b := result_digits.GetChar;
+
+         result_digits.SetPos(result_digits.Length - i);
+
+         result_digits.PutChar(b);
+
+         result_digits.SetPos(i + 1);
+
+         result_digits.PutChar(a);
+
+         i := i + 1;
+      END;
+
+      result :- NEW Bignum(result_digits);
+
+      result.Sign := result_sign;
+
+      Sign := asign;
+
+      other.Sign := bsign;
+
+      Divide :- result;
    END;
 
    REF(Bignum) PROCEDURE Multiply(other); REF(Bignum) other;
